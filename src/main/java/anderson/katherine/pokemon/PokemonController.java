@@ -11,22 +11,28 @@ public class PokemonController {
     @Autowired
     PokemonClient pokemonClient;
 
-    @RequestMapping(value = "/pokemon-species/{name}", method = RequestMethod.GET)
-    public Pokemon getPokemonByName(@PathVariable String name) {
-        return pokemonClient.getPokemonByName(name);
+    @RequestMapping(value = "/pokemon", method = RequestMethod.GET)
+    public Pokemon getPokemonByName(@RequestParam String name) {
+        Pokemon pokemon = pokemonClient.getPokemonByName(name);
+        setEvolutionChain(pokemon);
+        return pokemon;
     }
 
     @RequestMapping(value = "/random", method = RequestMethod.GET)
     public Pokemon getRandomPokemon() {
         Pokemon pokemon = pokemonClient.getRandomPokemon();
-        EvolutionChain evolutionChain = pokemonClient.getEvolutionChain(pokemon.getSpecies().getUrl());
-        pokemon.setEvolutionChain(evolutionChain);
+        setEvolutionChain(pokemon);
         return pokemon;
     }
 
     @RequestMapping(value = "/pokemon/{id}", method = RequestMethod.GET)
     public Pokemon getPokemonById(@PathVariable Integer id) {
         Pokemon pokemon = pokemonClient.getPokemonById(id);
+        pokemon = setEvolutionChain(pokemon);
+        return pokemon;
+    }
+
+    private Pokemon setEvolutionChain(Pokemon pokemon) {
         EvolutionChain evolutionChain = pokemonClient.getEvolutionChain(pokemon.getSpecies().getUrl());
         pokemon.setEvolutionChain(evolutionChain);
         return pokemon;

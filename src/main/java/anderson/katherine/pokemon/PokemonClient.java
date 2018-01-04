@@ -44,11 +44,6 @@ public class PokemonClient {
         return random.nextInt(max) + 1;
     }
 
-    public EvolutionChainUrl getEvolutionChain(int id) {
-        ResponseEntity<EvolutionChainUrl> responseEntity = restTemplate.exchange(API_URL + "evolution-chain/" + id, HttpMethod.GET, httpEntity, EvolutionChainUrl.class);
-        return responseEntity.getBody();
-    }
-
     public EvolutionChain getEvolutionChain(String fullUrl) {
         ResponseEntity<PokemonSpecies> responseEntity = restTemplate.exchange(fullUrl, HttpMethod.GET, httpEntity, PokemonSpecies.class);
         PokemonSpecies pokemonSpecies = responseEntity.getBody();
